@@ -1,3 +1,5 @@
+//  function to connect backend to database 
+
 import mongoose from "mongoose";
 
 export const connectDB = async () => {

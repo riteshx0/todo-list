@@ -1,4 +1,4 @@
-// middleware to check valid objectid 
+// middleware to check we are getting valid objectid from user 
 
 import mongoose from "mongoose";
 

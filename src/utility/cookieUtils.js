@@ -1,4 +1,4 @@
-// Utility to set token in cookie
+// Utility  to set token in cookie
  export const setTokenCookie = (res, token) => {
   res.cookie("token", token, {
     httpOnly: true,

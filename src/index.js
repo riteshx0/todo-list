@@ -1,6 +1,9 @@
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+// middleware for parsing cookies
 import cookieParser from "cookie-parser";
 
 // Importing database  connection function and routes
@@ -15,6 +18,8 @@ dotenv.config();
 
 // App Config
 const app = express();
+
+// default port number
 const port = process.env.PORT || 3000;
 
 // Connect to database
@@ -28,7 +33,7 @@ app.use(cors()); // for frontend requests
 // API Endpoints
 app.use("/api/tasks", taskRouter); // Task routes
 app.use("/api/auth", authRouter); // Auth routes
-app.get("/", (req, res) => {
+app.get("/", (req, res) => {      //  Root route
   res.send("To-Do List API");
 });
 

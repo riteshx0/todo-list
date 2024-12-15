@@ -30,7 +30,7 @@ const authUser = async (req, res, next) => {
         message: "User not found",
       });
     }
-    // attaching userId for further handlers . 
+    // attaching userId for next handlers/middlewares
     req.body.userId = user._id;
 
     // Proceed to the next middleware/handler

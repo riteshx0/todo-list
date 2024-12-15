@@ -11,7 +11,7 @@ export const createTask = async (req, res) => {
     const newTask = new Task({
       title,
       description,
-      status: status || "pending", // Default status to "pending"
+      status: "pending", // Default status to "pending"
       userId, // Associate the task with the authenticated user
     });
 

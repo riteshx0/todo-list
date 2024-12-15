@@ -1,3 +1,5 @@
+// Utility to create JWT token
+
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
