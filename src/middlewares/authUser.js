@@ -19,7 +19,7 @@ const authUser = async (req, res, next) => {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    //  Attaching user to req object for further handling
+    
     const user = await User.findById(decoded.userId);
     
     if (!user) {
@@ -28,8 +28,8 @@ const authUser = async (req, res, next) => {
         message: "User not found",
       });
     }
-
-    req.user = user;  // Assign the user object to the request object
+    // attaching userId for further handlers . 
+    req.body.userId = user._id;
 
     // Proceed to the next middleware/handler
     next();

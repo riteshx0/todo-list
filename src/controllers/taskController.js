@@ -1,24 +1,24 @@
 // Import the Task model
 import Task from "../models/taskModel.js";
 
-
-
 // Create a new task
 export const createTask = async (req, res) => {
-  const { title, description } = req.body; // Get title and description from request body
+  const userId = req.body.userId; // Getting userId from the request body from authUser
+
+  const { title, description, status } = req.body; // Get title and description from request body
 
   try {
     const newTask = new Task({
       title,
       description,
-      status: "pending", // status kept by default 'pending'
+      status: status || "pending", // Default status to "pending"
+      userId, // Associate the task with the authenticated user
     });
 
-    // Save the new task to the database
-    await newTask.save();
+    const savedTask = await newTask.save(); // Save the task to the database
 
     // Respond with the newly created task
-    res.status(201).json(newTask);
+    res.status(201).json(savedTask);
   } catch (error) {
     res.status(500).json({ message: "Error creating task" });
   }
@@ -26,8 +26,11 @@ export const createTask = async (req, res) => {
 
 // Get all tasks
 export const getTasks = async (req, res) => {
+  const userId = req.body.userId; // Getting userId from the request body from authUser
+
   try {
-    const tasks = await Task.find(); // Fetch all tasks from the database
+    // Only get tasks that belong to the authenticated user
+    const tasks = await Task.find({ userId });
 
     // Respond with all tasks
     res.status(200).json(tasks);
@@ -38,10 +41,11 @@ export const getTasks = async (req, res) => {
 
 // Get task by ID
 export const getTaskById = async (req, res) => {
+  const userId = req.body.userId; // Getting userId from the request body from authUser
   const { id } = req.params; // id received through params
 
   try {
-    const task = await Task.findById(id); // Find task by id
+    const task = await Task.findOne({ _id: id, userId }); // Check if the task belongs to the authenticated user
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
@@ -58,14 +62,14 @@ export const getTaskById = async (req, res) => {
 export const updateTaskStatus = async (req, res) => {
   const { id } = req.params; // id from request parameter
   const { status } = req.body;
-
+  const userId = req.body.userId;
   // Validating status
   if (!["pending", "in-progress", "completed"].includes(status)) {
     return res.status(400).json({ message: "Invalid status" });
   }
 
   try {
-    const task = await Task.findById(id); // Find task by Id
+    const task = await Task.findOne({ _id: id, userId });
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
@@ -85,17 +89,15 @@ export const updateTaskStatus = async (req, res) => {
 // Delete task by ID
 export const deleteTask = async (req, res) => {
   const { id } = req.params; // Get task ID from request parameters
-  
-  try {
-     
 
-    const task = await Task.findByIdAndDelete(id); // Find task by ID
+  const userId = req.body.userId;
+
+  try {
+    const task = await Task.findOneAndDelete({ _id: id, userId }); // Find task by ID and authenticated user
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
-
-    
 
     // Respond with a success message
     res.status(200).json({ message: "Task deleted successfully" });
