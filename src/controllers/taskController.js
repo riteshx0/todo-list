@@ -1,6 +1,6 @@
 // Import the Task model
 import Task from "../models/taskModel.js";
-import mongoose from "mongoose";
+
 
 
 // Create a new task
@@ -87,10 +87,7 @@ export const deleteTask = async (req, res) => {
   const { id } = req.params; // Get task ID from request parameters
   
   try {
-     // Validate ID format
-     if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
+     
 
     const task = await Task.findByIdAndDelete(id); // Find task by ID
 
