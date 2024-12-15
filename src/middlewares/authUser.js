@@ -5,8 +5,10 @@ import User from "../models/userModel.js";  // Import the User model
 //  Middleware to authenticate user using JWT stored in cookies
  
 const authUser = async (req, res, next) => {
+  
   try {
     // Extract token from the cookies 
+
     const token = req.cookies.token;
 
     if (!token) {
@@ -17,7 +19,7 @@ const authUser = async (req, res, next) => {
     }
 
     // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     
     const user = await User.findById(decoded.userId);
